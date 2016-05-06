@@ -8,11 +8,35 @@ fi
 
 . ${1}
 
-echo output
+INFRA_DIR="$(readlink -e $INFRA_DIR)"
 
-rm -rf output
-mkdir output
+# rm -rf ${INFRA_DIR}
+# mkdir ${INFRA_DIR}
 
-wget https://releases.hashicorp.com/packer/${INFRA_PACKER_VERSION}/packer_${INFRA_PACKER_VERSION}_linux_amd64.zip
-wget https://releases.hashicorp.com/terraform/${INFRA_TERRAFORM_VERSION}/terraform_${INFRA_TERRAFORM_VERSION}_linux_amd64.zip
+# packer_zip=packer_${INFRA_PACKER_VERSION}_linux_amd64.zip
+# terraform_zip=terraform_${INFRA_TERRAFORM_VERSION}_linux_amd64.zip
 
+# wget https://releases.hashicorp.com/packer/${INFRA_PACKER_VERSION}/$packer_zip
+# wget https://releases.hashicorp.com/terraform/${INFRA_TERRAFORM_VERSION}/$terraform_zip
+
+# # 압축 해제
+# unzip $packer_zip -d $INFRA_DIR/packer
+# unzip $terraform_zip -d $INFRA_DIR/terraform
+
+#실행 파일 경로 셋팅
+cp infra_path.inc ${INFRA_DIR}/infra_path.inc
+# 기존 저장 되어있는 경로 삭제
+# sed -i '/infra_path/d' ${HOME}/.bashrc
+line="$(awk '$0 ~ str{print NR FS b}{b=$0}' str="infra_path.inc"  $HOME/.bashrc)"
+if [ ${line} ]; then
+  line=$((line))
+  sed -i ''$line'd' ${HOME}/.bashrc
+  line=$((line - 1))
+  sed -i ''$line'd' ${HOME}/.bashrc
+fi
+
+echo "" >> ${HOME}/.bashrc
+echo "source ${INFRA_DIR}/infra_path.inc" >> ${HOME}/.bashrc
+
+rm -rf packer*
+rm -rf terraform*
