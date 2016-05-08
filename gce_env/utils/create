@@ -1,0 +1,61 @@
+#!/bin/bash
+
+if [ -z "${1}" ]; then
+  echo "Error: kubestack release file required"
+  echo "Usage: $0 kubestack-versions"
+  exit 1
+fi
+
+. ${1}
+
+rm -rf output
+mkdir output
+
+wget -N https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v${KUBERNETES_VERSION}/kubernetes.tar.gz
+wget -N https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz
+wget -N https://github.com/coreos/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
+wget -N https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}
+
+# docker
+cp docker-${DOCKER_VERSION} output/docker
+chmod +x output/docker
+
+# etcd
+tar -xf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
+cp etcd-v${ETCD_VERSION}-linux-amd64/etcd output/etcd
+cp etcd-v${ETCD_VERSION}-linux-amd64/etcdctl output/etcdctl
+chmod +x output/{etcd,etcdctl}
+
+# flannel
+tar -xf flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz
+cp flannel-${FLANNEL_VERSION}/flanneld output/flanneld
+chmod +x output/flanneld
+
+# kubernetes
+tar -xf kubernetes.tar.gz
+tar -xvf kubernetes/server/kubernetes-server-linux-amd64.tar.gz
+cp kubernetes/server/bin/hyperkube output/hyperkube
+cp kubernetes/server/bin/kube-apiserver output/kube-apiserver
+cp kubernetes/server/bin/kube-controller-manager output/kube-controller-manager
+cp kubernetes/server/bin/kube-proxy output/kube-proxy
+cp kubernetes/server/bin/kube-scheduler output/kube-scheduler
+cp kubernetes/server/bin/kubectl output/kubectl
+cp kubernetes/server/bin/kubelet output/kubelet
+chmod +x output/{hyperkube,kube-apiserver,kube-controller-manager,kube-proxy,kube-scheduler,kubectl,kubelet}
+
+cd output/ && shasum -a 256 * > CHECKSUM
+
+echo "docker ${DOCKER_VERSION}" > VERSION
+echo "etcd ${ETCD_VERSION}" >> VERSION
+echo "flannel ${FLANNEL_VERSION}" >> VERSION
+echo "kubernetes ${KUBERNETES_VERSION}" >> VERSION
+
+tar -cvzf utils-${UTIL_VERSION}.tar.gz *
+mv utils-${UTIL_VERSION}.tar.gz ../
+
+cd ../
+
+# rm -rf docker*
+# rm -rf etcd*
+# rm -rf flannel*
+# rm -rf kubernetes*

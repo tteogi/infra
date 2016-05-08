@@ -1,0 +1,10 @@
+{
+    "account_file": "/etc/BuddyonServer-account.json",
+    "project_id": "buddyonserver",
+    "source_image": "coreos-alpha-1032-1-0-v20160505",
+    "zone": "asia-east1-c",
+    "image_name": "buddyon-v20160606",
+    "image_description": "CoreOS Buddyon Server Base Image",
+    "machine_type": "n1-standard-1",
+    "server_binaries": "http://storage.googleapis.com/kubestack/kubestack-0.17.1.tar.gz"
+}
