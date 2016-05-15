@@ -7,7 +7,7 @@
     "image_name": "{{env `IMAGE_NAME`}}",
     "image_description": "{{env `IMAGE_DESCRIPTION`}}",
     "machine_type": "{{env `MACHINE_TYPE`}}",
-    "kube_binaries": "{{env `KUBE_BINARIES`}}"
+    "util_binaries": "{{env `UTIL_BINARIES`}}"
     },
     "builders": [{
         "type": "googlecompute",
@@ -30,8 +30,8 @@
         "type": "shell",
         "inline": [
             "sudo mkdir -p /opt/bin",
-            "wget -N -O kubestack.tar.gz {{user `kube_binaries`}}",
-            "sudo tar -xvf kubestack.tar.gz -C /opt/bin",
+            "wget -N -O utils.tar.gz {{user `util_binaries`}}",
+            "sudo tar -xvf utils.tar.gz -C /opt/bin",
             "sudo chmod +x -R /opt/bin",
             "sudo chown root:root -R /opt/bin",
             "sudo mv /tmp/units/*.service /etc/systemd/system",

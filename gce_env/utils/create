@@ -55,7 +55,7 @@ mv utils-${UTIL_VERSION}.tar.gz ../
 
 cd ../
 
-# rm -rf docker*
-# rm -rf etcd*
-# rm -rf flannel*
-# rm -rf kubernetes*
+rm -rf docker*
+rm -rf etcd*
+rm -rf flannel*
+rm -rf kubernetes*
