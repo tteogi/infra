@@ -5,5 +5,5 @@ if [ "$apparent_sdk_dir" == "$script_link" ]; then
 fi
 
 infra_dir="$( command cd -P "$apparent_sdk_dir" > /dev/null && pwd -P )"
-bin_path="$infra_dir/packer:""$infra_dir/terraform"
+bin_path="$infra_dir/packer:""$infra_dir/terraform:""$infra_dir/consul:""$infra_dir/nomad"
 export PATH=$bin_path:$PATH

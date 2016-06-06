@@ -13,15 +13,21 @@ INFRA_DIR="$(readlink -f $INFRA_DIR)"
 rm -rf ${INFRA_DIR}
 mkdir ${INFRA_DIR}
 
-packer_zip=packer_${INFRA_PACKER_VERSION}_linux_amd64.zip
-terraform_zip=terraform_${INFRA_TERRAFORM_VERSION}_linux_amd64.zip
+packer_zip=packer_${PACKER_VERSION}_linux_amd64.zip
+terraform_zip=terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+consul_zip=consul_${CONSUL_VERSION}_linux_amd64.zip
+nomad_zip=nomad_${NOMAD_VERSION}_linux_amd64.zip
 
-wget https://releases.hashicorp.com/packer/${INFRA_PACKER_VERSION}/$packer_zip
-wget https://releases.hashicorp.com/terraform/${INFRA_TERRAFORM_VERSION}/$terraform_zip
+wget https://releases.hashicorp.com/packer/${PACKER_VERSION}/$packer_zip
+wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/$terraform_zip
+wget https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip
+wget https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip
 
 # 압축 해제
 unzip $packer_zip -d $INFRA_DIR/packer
 unzip $terraform_zip -d $INFRA_DIR/terraform
+unzip $consul_zip -d $INFRA_DIR/consul
+unzip $nomad_zip -d $INFRA_DIR/nomad
 
 #실행 파일 경로 셋팅
 cp infra_path.inc ${INFRA_DIR}/infra_path.inc
@@ -42,3 +48,7 @@ echo "infra directory = ${INFRA_DIR}"
 
 rm -rf packer*
 rm -rf terraform*
+rm -rf consul*
+rm -rf nomad*
+
+exec -l $SHELL

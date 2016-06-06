@@ -11,25 +11,38 @@ fi
 rm -rf output
 mkdir output
 
-wget -N https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v${KUBERNETES_VERSION}/kubernetes.tar.gz
-wget -N https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz
-wget -N https://github.com/coreos/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
+
+wget -N https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip
+wget -N https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip
 wget -N https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}
+#wget -N https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v${KUBERNETES_VERSION}/kubernetes.tar.gz
+#wget -N https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz
+#wget -N https://github.com/coreos/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
+
+#consul
+unzip consul_${CONSUL_VERSION}_linux_amd64.zip
+cp consul output/consul
+chmod +x output/consul
+
+#nomad
+unzip nomad_${NOMAD_VERSION}_linux_amd64.zip
+cp nomad output/nomad
+chmod +x output/nomad
 
 # docker
 cp docker-${DOCKER_VERSION} output/docker
 chmod +x output/docker
 
 # etcd
-tar -xf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
-cp etcd-v${ETCD_VERSION}-linux-amd64/etcd output/etcd
-cp etcd-v${ETCD_VERSION}-linux-amd64/etcdctl output/etcdctl
-chmod +x output/{etcd,etcdctl}
+#tar -xf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
+#cp etcd-v${ETCD_VERSION}-linux-amd64/etcd output/etcd
+#cp etcd-v${ETCD_VERSION}-linux-amd64/etcdctl output/etcdctl
+#chmod +x output/{etcd,etcdctl}
 
 # flannel
-tar -xf flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz
-cp flannel-${FLANNEL_VERSION}/flanneld output/flanneld
-chmod +x output/flanneld
+#tar -xf flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz
+#cp flannel-${FLANNEL_VERSION}/flanneld output/flanneld
+#chmod +x output/flanneld
 
 # kubernetes
 tar -xf kubernetes.tar.gz
@@ -55,6 +68,8 @@ mv utils-${UTIL_VERSION}.tar.gz ../
 
 cd ../
 
+rm -rf consul*
+rm -rf nomad*
 rm -rf docker*
 rm -rf etcd*
 rm -rf flannel*
