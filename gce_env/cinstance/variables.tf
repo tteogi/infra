@@ -1,5 +1,5 @@
 variable "account_file" {
-    default = "/etc/kubestack-account.json"
+    default = "/etc/BuddyonServer-account.json"
 }
 
 variable "discovery_url" {}
@@ -12,9 +12,7 @@ variable "flannel_network" {
     default = "10.10.0.0/16"
 }
 
-variable "image" {
-    default = "kubestack-0-17-1-v20150606"
-}
+variable "image" {}
 
 variable "project" {}
 
@@ -28,9 +26,7 @@ variable "region" {
 
 variable "sshkey_metadata" {}
 
-variable "token_auth_file" {
-    default = "secrets/tokens.csv"
-}
+variable "token_auth_file" {}
 
 variable "worker_count" {
     default = 3

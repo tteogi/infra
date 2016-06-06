@@ -22,7 +22,7 @@ resource "template_file" "kubernetes" {
 }
 
 provider "google" {
-    account_file = "${var.account_file}"
+    credentials = "${file("${var.account_file}")}"
     project = "${var.project}"
     region = "${var.region}"
 }
@@ -44,7 +44,7 @@ resource "google_compute_instance" "etcd" {
     count = 3
 
     name = "${var.cluster_name}-etcd${count.index}"
-    machine_type = "custom-2-1024"
+    machine_type = "custom-1-2048"
     can_ip_forward = true
     zone = "${var.zone}"
     tags = ["etcd"]
