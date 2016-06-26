@@ -2,10 +2,28 @@ output "gameserver" {
     value = "${join("\n", google_compute_instance.gameserver.*.network_interface.0.access_config.0.assigned_nat_ip)}"
 }
 
-resource "template_file" "gameserver" {
+resource "template_file" "env" {
     template = "${file("./templates/gameserver.env")}"
     vars {
-        servername = "ok"
+    }
+}
+
+resource "template_file" "consul" {
+    count    = "${var.server_count}"
+    template = "${file("./templates/consul.json")}"
+    vars {
+        node_name = "${var.cluster_name}-gameserver${count.index}"
+        datacenter = "${var.consul_datacetner}"
+        server_address = "${var.consul_address}"
+    }
+}
+
+resource "template_file" "nomad" {
+    count    = "${var.server_count}"
+    template = "${file("./templates/nomad.hcl")}"
+    vars {
+        node_name = "${var.cluster_name}-gameserver${count.index}"
+        nomadserver_address = "${var.nomad_address}"
     }
 }
 
@@ -42,13 +60,17 @@ resource "google_compute_instance" "gameserver" {
 
     provisioner "remote-exec" {
         inline = [
-            "cat <<'EOF' > /tmp/gameserver.env\n${template_file.gameserver.rendered}\nEOF",
-            "echo 'ETCD_NAME=${self.name}' >> /tmp/gameserver.env",
-            "echo 'ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379' >> /tmp/gameserver.env",
-            "echo 'ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380' >> /tmp/gameserver.env",
-            "echo 'ETCD_INITIAL_ADVERTISE_PEER_URLS=http://${self.network_interface.0.address}:2380' >> /tmp/gameserver.env",
-            "echo 'ETCD_ADVERTISE_CLIENT_URLS=http://${self.network_interface.0.address}:2379' >> /tmp/gameserver.env",
-            "sudo mv /tmp/gameserver.env /etc/gameserver.env",
+            "cat <<'EOF' > /tmp/server.env\n${template_file.env.rendered}\nEOF",
+            "echo 'ETCD_NAME=${self.name}' >> /tmp/server.env",
+            "echo 'ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379' >> /tmp/server.env",
+            "echo 'ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380' >> /tmp/server.env",
+            "echo 'ETCD_INITIAL_ADVERTISE_PEER_URLS=http://${self.network_interface.0.address}:2380' >> /tmp/server.env",
+            "echo 'ETCD_ADVERTISE_CLIENT_URLS=http://${self.network_interface.0.address}:2379' >> /tmp/server.env",
+            "cat <<'EOF' > /tmp/consul.json\n${template_file.consul.rendered}\nEOF",
+            "cat <<'EOF' > /tmp/nomad.hcl\n${template_file.nomad.rendered}\nEOF",
+            "sudo mv /tmp/server.env /opt/etc/server.env",
+            "sudo mv /tmp/consul.json /opt/etc/consul.json",
+            "sudo mv /tmp/nomad.hcl /opt/etc/nomad.hcl",
         ]
         connection {
             user = "core"
@@ -57,6 +79,8 @@ resource "google_compute_instance" "gameserver" {
     }
 
     depends_on = [
-        "template_file.gameserver",
+        "template_file.env",
+        "template_file.consul",
+        "template_file.nomad",
     ]
 }

@@ -1,0 +1,13 @@
+{
+  "datacenter": ${datacenter},
+  "data_dir": "/opt/consul",
+  "log_level": "INFO",
+  "node_name": ${node_name},
+  "server": false,
+  "watches": [
+    {
+        "type": "checks",
+        "handler": "/usr/bin/health-check-handler.sh"
+    }
+  ]
+}

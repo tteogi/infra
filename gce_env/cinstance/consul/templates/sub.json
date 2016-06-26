@@ -1,0 +1,10 @@
+{
+  "datacenter": ${datacenter},
+  "data_dir": "/opt/datas/consul",
+  "log_level": "INFO",
+  "node_name": ${node_name},
+  "server": true,
+  "start_join" : [&join_servers&],
+  "retry_join" : [&join_servers&],
+  "retry_interval" : "15s"
+}

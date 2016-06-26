@@ -1,0 +1,12 @@
+[Unit]
+Description=Nomad
+Documentation=https://nomadproject.io/docs/
+
+[Service]
+EnvironmentFile=/opt/etc/server.env
+Restart=on-failure
+ExecStart=/opt/bin/nomad agent -config /opt/etc/nomad.d
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

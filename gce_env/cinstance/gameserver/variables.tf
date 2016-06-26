@@ -15,7 +15,7 @@ variable "flannel_network" {
 }
 
 variable "image" {
-	default = "buddyon-v20160606"
+	default = "buddyon-v20160611-2"
 }
 
 variable "project" {
@@ -47,5 +47,17 @@ variable "zone" {
 }
 
 variable "cluster_name" {
+    default = "buddyon"
+}
+
+variable "consul_address" {
+    default = "130.211.201.245"
+}
+
+variable "nomad_address" {
+    default = "130.211.201.245"
+}
+
+variable "consul_datacetner" {
     default = "buddyon"
 }
