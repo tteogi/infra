@@ -19,16 +19,17 @@ resource "template_file" "env" {
 resource "template_file" "bootstrap" {
     template = "${file("./templates/bootstrap.json")}"
     vars {
-        node_name = "consul-bootstrap-server"
+        node_name = "consul-server-bootstrap"
         datacenter = "${var.consul_datacenter}"
+        server_count = "${var.server_count}"
     }
 }
 
 resource "template_file" "sub" {
-    count = "${var.server_count}"
+    count = "${var.server_count - 1}"
     template = "${file("./templates/sub.json")}"
     vars {
-        node_name = "consul-sub${count.index}-server"
+        node_name = "consul-server-sub${count.index}"
         datacenter = "${var.consul_datacenter}"
     }
 }
@@ -42,7 +43,7 @@ resource "template_file" "server_address" {
 resource "google_compute_instance" "bootstrap" {
     count = 1
 
-    name = "consul-bootstrap-server"
+    name = "consul-server-bootstrap"
     machine_type = "custom-1-2048"
     can_ip_forward = true
     zone = "${var.zone}"
@@ -76,13 +77,13 @@ resource "google_compute_instance" "bootstrap" {
     }
 
     depends_on = [
-        "template_file.consul_bootstrap",
+        "template_file.bootstrap",
         "template_file.env",
     ]
 }
 
 resource "google_compute_instance" "sub" {
-    count = "${var.server_count}"
+    count = "${var.server_count - 1}"
     name = "consul-sub${count.index}-server"
     machine_type = "custom-1-2048"
     can_ip_forward = true
@@ -128,7 +129,7 @@ resource "google_compute_instance" "sub" {
 }
 
 resource "null_resource" "cluster" {
-    count = "${var.server_count}"
+    count = "${var.server_count - 1}"
 
     triggers {
         cluster_instance_ids = "${join(",", google_compute_instance.sub.*.id)}"
