@@ -14,6 +14,7 @@ do
         include_servers+="\"$i\""
     fi
 done
+
 # if [ $include_servers ]; then
 #     include_servers+=","
 # fi

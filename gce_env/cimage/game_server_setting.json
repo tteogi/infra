@@ -1,10 +1,10 @@
 {
     "account_file": "/etc/BuddyonServer-account.json",
-    "project_id": "buddyon-1354",
-    "source_image": "coreos-stable-1010-5-0-v20160527",
+    "project_id": "buddyon-140107",
+    "source_image": "ubuntu-1604-xenial-v20160721",
     "zone": "asia-east1-c",
-    "image_name": "buddyon-v20160626",
-    "image_description": "CoreOS Buddyon Server Base Image",
+    "image_name": "buddyon-v20160726-2",
+    "image_description": "Ubuntu Buddyon Server Base Image",
     "machine_type": "n1-standard-1",
     "util_binaries": "utils-0.0.1.tar.gz"
 }

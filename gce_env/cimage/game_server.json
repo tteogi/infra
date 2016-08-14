@@ -32,22 +32,24 @@
         "destination": "/tmp/{{user `util_binaries`}}"
     },
     {
+        "type": "file",
+        "source": "shell",
+        "destination": "/tmp"
+    },
+    {
+        "type": "file",
+        "source": "init_server.sh",
+        "destination": "/tmp/init_server.sh"
+    },
+    {
         "type": "shell",
         "inline": [
             "sudo mkdir -p /opt/bin",
-            "sudo tar -xvf /tmp/{{user `util_binaries`}} -C /opt/bin",
-            "sudo chmod +x -R /opt/bin",
-            "sudo chown root:root -R /opt/bin",
-            "sudo mv /tmp/services/*.service /etc/systemd/system",
-            "rm -rf /tmp/services",
-            "sudo mkdir -p /opt/etc",
-            "sudo mkdir -p /opt/datas",
-            "sudo mkdir -p /opt/etc/consul.d",
-            "sudo mkdir -p /opt/etc/nomad.d",
-            "sudo chmod +x -R /opt/etc",
-            "sudo chown root:root -R /opt/etc",
-            "sudo chmod +x -R /opt/datas",
-            "sudo chown root:root -R /opt/datas"
+            "sudo tar -xvf /tmp/{{user `util_binaries`}} -C /opt/bin"
         ]
+    },
+    {
+        "type": "shell",
+        "script" : "init_server.sh"
     }]
 }

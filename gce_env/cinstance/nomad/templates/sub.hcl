@@ -1,21 +1,38 @@
-bind_addr = "10.21.0.10"
-
-advertise {
-  # We need to specify our host's IP because we can't
-  # advertise 0.0.0.0 to other nodes in our cluster.
-  rpc = "10.21.0.10:4647"
-}
+bind_addr = "0.0.0.0"
 
 # Increase log verbosity
 log_level = "DEBUG"
 
 # Setup data dir
-data_dir = "/opt/nomad/data"
+data_dir = "/opt/datas/nomad"
+
+name = "${node_name}"
+
+datacenter = "${datacenter}"
+
+region = "${region}"
+
+advertise {
+	http = "&my_address&:4646"
+	rpc = "&my_address&:4647"
+	serf = "&my_address&:4648"
+}
+
+addresses {
+  rpc = "&my_address&"
+  serf = "&my_address&"
+}
 
 # Enable the server
 server {
     enabled = true
-    start_join = [&join_servers&] 
-    retry_join = [&join_servers&]
-    retry_interval = "15s"
+    bootstrap_expect = ${server_count}
+    #start_join = [&join_servers&] 
+    #retry_join = [&join_servers&]
+    #retry_interval = "15s"
+}
+
+consul {
+  server_auto_join =  true
+  client_auto_join =  true
 }

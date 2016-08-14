@@ -31,6 +31,7 @@ resource "template_file" "sub" {
     vars {
         node_name = "consul-server-sub${count.index}"
         datacenter = "${var.consul_datacenter}"
+        server_count = "${var.server_count}"
     }
 }
 
@@ -68,7 +69,9 @@ resource "google_compute_instance" "bootstrap" {
     provisioner "remote-exec" {
         inline = [
             "cat <<'EOF' > /tmp/consul.json\n${template_file.bootstrap.rendered}\nEOF",
-            "sudo mv /tmp/consul.json /opt/etc/consul.d/consul.json"
+            "sudo mv /tmp/consul.json /opt/etc/consul.d/consul.json",
+            "cat <<'EOF' > /tmp/server.env\n${template_file.env.rendered}\nEOF",
+            "sudo mv /tmp/server.env /opt/etc/server.env",
         ]
         connection {
             user = "core"
@@ -110,6 +113,8 @@ resource "google_compute_instance" "sub" {
         inline = [
             "cat <<'EOF' > /tmp/consul.json\n${element(template_file.sub.*.rendered, count.index)}\nEOF",
             "sudo mv /tmp/consul.json /opt/etc/consul.d/consul.json",
+            "cat <<'EOF' > /tmp/server.env\n${template_file.env.rendered}\nEOF",
+            "sudo mv /tmp/server.env /opt/etc/server.env",
         ]
         connection {
             user = "core"

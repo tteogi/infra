@@ -11,11 +11,11 @@ variable "project" {
 }
 
 variable "region" {
-    default = "us-central1"
+    default = "asia-east1"
 }
 
 variable "zone" {
-    default = "us-central1-a"
+    default = "asia-east1-b"
 }
 
 variable "cluster_name" {

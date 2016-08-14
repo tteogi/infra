@@ -15,11 +15,11 @@ variable "flannel_network" {
 }
 
 variable "image" {
-	default = "buddyon-v20160611-2"
+	default = "buddyon-v20160626"
 }
 
 variable "project" {
-    default = "buddyonserver"
+    default = "buddyon"
 }
 
 variable "portal_net" {
@@ -27,11 +27,10 @@ variable "portal_net" {
 }
 
 variable "region" {
-    default = "us-central1"
+    default = "asia-east1"
 }
 
 variable "sshkey_metadata" {
-	default = "core: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDfuvpdY6YGFvxVrYg5bsSnwxdpvl3KOfYNkC72ilUcp4Ax+1pP75dalspRylB1D7rrL0xQR0hzKu+7nBcYmvw2EhJifH0ESm3ICKaw0yvy2At6X+UlzR3YhnmJ84+HfLNetdGpc+qRKRR6FZqiO5fUw8Lyp+SAsrWPFOOuHYObUmcLrkJl0Ii/3oEjyWgAXtTcIKn4Iu+utGzmipwmOam0LoWhIrhoF7CBmM1mccSblJ1pCKgGcSyHUb0WwL/Yi1Fh6Vm2VW2g71VydCvr5VEPylsNWd9zoNxEAzUpUM9E4JBfkfLl9bsPReKDvGc0pyLRL6g/23Px2M1C+YlQ40z5 ubuntu@ubuntu-xenial"
 }
 
 variable "token_auth_file" {
@@ -39,23 +38,23 @@ variable "token_auth_file" {
 }
 
 variable "server_count" {
-    default = 1
+    default = 2
 }
 
 variable "zone" {
-    default = "us-central1-a"
+    default = "asia-east1-b"
 }
 
 variable "cluster_name" {
     default = "buddyon"
 }
 
-variable "consul_address" {
-    default = "130.211.201.245"
+variable "consul_servers" {
+    default = "\"10.140.0.3\",\"10.140.0.2\",\"10.140.0.4\""
 }
 
-variable "nomad_address" {
-    default = "130.211.201.245"
+variable "nomad_servers" {
+    default = "\"10.140.0.3\",\"10.140.0.2\",\"10.140.0.4\""
 }
 
 variable "consul_datacetner" {
