@@ -1,16 +1,16 @@
 [Unit]
 Description=Docker Application Container Engine
-Documentation=http://docs.docker.io
-Requires=flannel.service
-After=flannel.service
+Documentation=https://docs.docker.com
+After=network.target docker.socket
+Requires=docker.socket
 
 [Service]
-EnvironmentFile=/opt/etc/server.env
-EnvironmentFile=/run/flannel/subnet.env
-ExecStartPre=/bin/mount --make-rprivate /
-ExecStart=/opt/bin/docker --bip=${FLANNEL_SUBNET} --mtu=${FLANNEL_MTU} $DOCKER_OPTS
-Restart=on-failure
-RestartSec=5
+Type=notify
+ExecStart=/usr/bin/docker daemon -H fd://
+LimitNOFILE=1048576
+LimitNPROC=1048576
+TasksMax=1048576
 
 [Install]
+Also=docker.socket
 WantedBy=multi-user.target
