@@ -1,0 +1,50 @@
+{
+  "data_dir": "/opt/consul/datas/",
+  "log_level": "INFO",
+
+  "client_addr": "0.0.0.0",
+  "bind_addr": "0.0.0.0",
+
+  "leave_on_terminate": false,
+  "skip_leave_on_interrupt": true,
+
+  "node_name": "${node_name}",
+  "datacenter": "${datacenter}",
+  "server": true,
+  "bootstrap_expect": ${server_count},
+
+  "start_join" : [&join_servers&],
+  "retry_join" : [&join_servers&],
+  "dns_config": {
+    "allow_stale": true,
+    "node_ttl": "5s",
+    "max_stale": "10s",
+    "service_ttl": {
+      "*": "5s",
+      "api": "10s"
+    }
+  },
+  "checks": [
+        {
+            "id" : "check_cpu_utilization",
+            "notes" : "Greater than 50% warn, greater than 75% fail.",
+            "name" : "CPU Utilization",
+            "script" : "/opt/bin/shell/cpu_utilization.sh",
+            "interval" : "30s"
+        },
+        {
+          "id" : "check_mem_utilization",
+          "notes" : "Greater than 50% warn, greater than 75% fail.",
+          "name" : "MEM Utilization",
+          "script" : "/opt/bin/shell/mem_utilization.sh",
+          "interval" : "30s"
+        },
+        {
+          "id" : "check_hdd_utilization",
+          "notes" : "Greater than 50% warn, greater than 75% fail.",
+          "name" : "HDD Utilization",
+          "script" : "/opt/bin/shell/hdd_utilization.sh",
+          "interval" : "30s"
+        }
+    ]
+}
